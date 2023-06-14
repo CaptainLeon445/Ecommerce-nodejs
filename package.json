@@ -1,0 +1,24 @@
+{
+  "name": "ecommerce-api-endpoints",
+  "version": "1.0.0",
+  "description": "This project contains an ecommerce api endpoints",
+  "main": "app.js",
+  "scripts": {
+    "start": "npx nodemon server.js"
+  },
+  "author": "Dat Tech Guy",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.1.4",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.2.4",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "sharp": "^0.32.1",
+    "slugify": "^1.6.6",
+    "validator": "^13.9.0"
+  }
+}
