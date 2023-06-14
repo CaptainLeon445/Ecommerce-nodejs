@@ -6,6 +6,12 @@ const reviewSchema = mongoose.Schema({
         required: true,
         trim: true
     },
+    ratings:{
+        type: Number,
+        default: 0,
+        min: [1, "Ratings should be greater than 0 "],
+        max: [5, "Ratings should not be more than 5"],
+    },
     product:{
         type: mongoose.Schema.ObjectId,
         ref: "Products",

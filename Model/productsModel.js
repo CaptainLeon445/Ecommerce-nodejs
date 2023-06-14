@@ -43,7 +43,7 @@ const productSchema=mongoose.Schema({
     imageURL:[{type:String}],
     size:[{type:String}],
     color:[{type:String}],
-    ratings:{
+    ratingsAverage:{
         type: Number,
         default: 4.5
     },
