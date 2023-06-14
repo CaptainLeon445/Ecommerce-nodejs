@@ -52,13 +52,22 @@ exports.createCart = async (req, res) => {
   }
 };
 
-exports.getAReview = async (req, res) => {
-  try {
-    const id = req.params.id;
-    const data = await Cart.findById(id);
+exports.getToal = async (req, res) => {
+    try {
+      const cart = req.session.cart || [];
+    let totalPrice = 0;
+    console.log("Cart", cart)
+    for (const item of cart) {
+        const product =await Products.findById(item.product);
+        if (product) {
+            const subtotal = item.quantity * product.price;
+            totalPrice += subtotal;
+      }
+    }
     res.status(200).json({
       message: "success",
-      data,
+      results: cart.length,
+      totalPrice
     });
   } catch (err) {
     res.status(400).json({
