@@ -6,6 +6,7 @@ const productSchema=mongoose.Schema({
         required:[true, "Product's name cannot be blank"],
         minLength:[2, "Name of product must at least contain five characters"],
         unique:true,
+        // lowercase: true
     },
     price:{
         type:Number,
