@@ -5,6 +5,8 @@ const categoriesRoutes=require("./Routes/categoriesRoutes")
 const reviewsRoutes=require("./Routes/reviewsRoutes")
 const statsRoutes=require("./Routes/statsRoutes")
 const cartRoutes=require("./Routes/cartRoutes")
+const favoriteRoutes=require("./Routes/favoriteRoutes")
+
 
 
 
@@ -13,6 +15,7 @@ app.use("/v1/api/categories", categoriesRoutes)
 app.use("/v1/api/products", productsRoutes)
 app.use("/v1/api/reviews", reviewsRoutes)
 app.use("/v1/api/cart", cartRoutes)
+app.use("/v1/api/favorites", favoriteRoutes)
 app.use("/v1/api/stats", statsRoutes)
 
 
