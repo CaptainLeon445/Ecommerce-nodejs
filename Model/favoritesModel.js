@@ -20,10 +20,18 @@ const favoriteSchema = mongoose.Schema({
         default: Date.now()
     },
     updatedAt: Date
-}, {
-    strictPopulate: false
 })
 favoriteSchema.pre(/^find/, function(next){
+    this.populate({
+        path: "product",
+        select: "-createdAt -updatedAt -__v"
+    }).populate({
+        path: "user",
+        select: "email"
+    })
+    next()
+})
+favoriteSchema.pre(/^findOne/, function(next){
     this.populate({
         path: "product",
         select: "name"

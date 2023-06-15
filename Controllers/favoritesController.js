@@ -52,10 +52,11 @@ exports.createfavorites = async (req, res) => {
   }
 };
 
-exports.getAReview = async (req, res) => {
+exports.getUserfavorites = async (req, res) => {
   try {
-    const id = req.params.id;
-    const data = await favorites.findById(id);
+    // req.body.product = req.params.prdId;
+    req.body.user = req.params.userId;
+    const data = await favorites.find({user: req.body.user});
     res.status(200).json({
       message: "success",
       data,
@@ -68,39 +69,23 @@ exports.getAReview = async (req, res) => {
   }
 };
 
-exports.deleteAReview = async (req, res) => {
-  try {
-    const id = req.params.id;
-    await favorites.findById(id);
-    res.status(204).json({
-      message: "success",
-      data: null,
-    });
-  } catch (err) {
-    res.status(400).json({
-      message: "success",
-      err: err.message,
-    });
-  }
-};
+exports.getUserfavoriteDetails = async (req, res) => {
+    try {
+      req.body.product = req.params.prdId;
+      req.body.user = req.params.userId;
+      const data = await favorites.find({user: req.body.user, product: req.body.product});
+      res.status(200).json({
+        message: "success",
+        data,
+      });
+    } catch (err) {
+      res.status(400).json({
+        message: "success",
+        err: err.message,
+      });
+    }
+  };
 
-exports.updatefavorites = async (req, res) => {
-  try {
-    const id = req.params.id;
-    const content = req.body;
-    const data = await favorites.findByIdAndUpdate(id, content, {
-      new: true,
-      runValidators: true,
-    });
-    await data.save();
-    res.status(200).json({
-      message: "success",
-      data,
-    });
-  } catch (err) {
-    res.status(400).json({
-      message: "success",
-      err: err.message,
-    });
-  }
-};
+
+
+
