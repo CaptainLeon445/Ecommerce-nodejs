@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
+const crypto = require("crypto");
 
 const userSchema = mongoose.Schema({
   username: {
@@ -55,14 +56,12 @@ const userSchema = mongoose.Schema({
   passwordResetToken: String,
   passwordResetExpires: Date,
 });
-
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   this.password = await bcrypt.hash(this.password, 12);
   this.passwordConfirm = undefined;
   next();
 });
-
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password") || this.isNew) return next();
 

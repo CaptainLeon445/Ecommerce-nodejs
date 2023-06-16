@@ -40,7 +40,7 @@ const productSchema=mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: "Categories"
     },
-    imageCover:String,
+    mainImage: String,
     imageURL:[{type:String}],
     size:[{type:String}],
     color:[{type:String}],

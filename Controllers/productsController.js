@@ -1,7 +1,45 @@
 const mongoose = require("mongoose");
 const Products = require("../Model/productsModel");
 const Categories = require("../Model/categoriesModel");
+const multer = require("multer");
+const sharp = require("sharp");
 
+
+// const multerStorage = multer.diskStorage({
+//   destination: (req, file, cb)=>{
+//     cb(null, "public/img/products")
+//   },
+//   filename: (req, file, cb)=>{
+//     const ext = file.mimetype.split('/')[1]
+//     cb(null, `product-${req.user.id}-${Date.now()}.${ext}`)
+//   }
+// })
+const multerStorage = multer.memoryStorage();
+
+const multerFilter =(req, file, cb)=>{
+  if(file.mimetype.startsWith('image')){
+    cb(null, true)
+  }else{
+    cb( new Error("Upload only image"), false)
+  }
+}
+
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter
+});
+
+exports.uplooadProductPhotos = upload.single('mainImage')
+exports.ResizePhotoUpload = async(req, res, next) => {
+  if (!req.file) return next();
+  req.file.filename = `products-${req.user.id}-${Date.now()}.jpeg`;
+  await sharp(req.file.buffer)
+    .resize(500, 500)
+    .toFormat('jpeg')
+    .jpeg({ quality: 90 })
+    .toFile(`public/img/products/${req.file.filename}`);
+  next()
+};
 exports.getProducts = async (req, res) => {
   try {
     // 1 Filtering
@@ -15,12 +53,15 @@ exports.getProducts = async (req, res) => {
       queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`)
     );
     let query = Products.find(queryStr);
-    // filter by Category
-    const category = await Categories.find(queryStr);
-    if (category.length !== 0) {
-      const ctgId = new mongoose.Types.ObjectId(category[0]._id);
-      query = Products.find({ category: ctgId });
-    }
+    
+    // // filter by Category
+    // const category = await Categories.find(req.params.ctgId);
+    // if (category.length !== 0) {
+    //   const ctgId = new mongoose.Types.ObjectId(category[0]._id);
+    //   query = Products.find({ category: ctgId });
+    // }
+  
+    
 
     // sort
     if (req.query.sort) {
@@ -47,6 +88,7 @@ exports.getProducts = async (req, res) => {
 exports.createProducts = async (req, res) => {
   try {
     const content = req.body;
+    if (req.file) content.mainImage=req.file.filename
     if (!content) throw new Error("Please enter the product details");
     // create products under a category
     const categoryId = req.params.ctgId;
