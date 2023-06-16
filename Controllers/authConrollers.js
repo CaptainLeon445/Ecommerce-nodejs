@@ -35,7 +35,7 @@ exports.login=async (req, res)=>{
         if (!email || !password){
             return res.status(400).json({
                 message:"fail",
-                err: "Credentials not found in the database"
+                err: "Fields cannot be blank"
             })
         }
         const user=await User.findOne({email}).select("+password")
