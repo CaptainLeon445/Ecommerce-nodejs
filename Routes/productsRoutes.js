@@ -13,5 +13,5 @@ const { authProtect, restrictTo } = require("../Controllers/authConrollers");
 
 Router.route("/").get(getProducts)
 Router.route("/:ctgId").post(authProtect,restrictTo("admin"),uploadProductPhotos,ResizePhotoUpload, createProducts)
-Router.route("/:id").get(authProtect,getAProduct).patch(authProtect,restrictTo("admin"),uploadProductPhotos,ResizePhotoUpload, updateProducts).delete(deleteAProduct);
+Router.route("/:id").get(authProtect,getAProduct).patch(authProtect,restrictTo("admin"),uploadProductPhotos,ResizePhotoUpload, updateProducts).delete(authProtect,restrictTo("admin"), deleteAProduct);
 module.exports = Router;
