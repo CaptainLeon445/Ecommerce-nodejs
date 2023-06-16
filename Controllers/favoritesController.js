@@ -22,7 +22,7 @@ exports.getfavorites = async (req, res) => {
 exports.createfavorites = async (req, res) => {
   try {
     req.body.product = req.params.prdId;
-    req.body.user = req.params.userId;
+    req.body.user = req.user.id;
     let favorite = await favorites.findOne({user:req.body.user, product:req.body.product});
     req.body.favorite=true
     if (favorite) {
@@ -55,7 +55,7 @@ exports.createfavorites = async (req, res) => {
 exports.getUserfavorites = async (req, res) => {
   try {
     // req.body.product = req.params.prdId;
-    req.body.user = req.params.userId;
+    req.body.user =  req.user.id;
     const data = await favorites.find({user: req.body.user});
     res.status(200).json({
       message: "success",
@@ -72,7 +72,7 @@ exports.getUserfavorites = async (req, res) => {
 exports.getUserfavoriteDetails = async (req, res) => {
     try {
       req.body.product = req.params.prdId;
-      req.body.user = req.params.userId;
+      req.body.user =  req.user.id;
       const data = await favorites.find({user: req.body.user, product: req.body.product});
       res.status(200).json({
         message: "success",

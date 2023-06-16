@@ -29,7 +29,7 @@ const upload = multer({
   fileFilter: multerFilter
 });
 
-exports.uplooadProductPhotos = upload.single('mainImage')
+exports.uploadProductPhotos = upload.single('mainImage')
 exports.ResizePhotoUpload = async(req, res, next) => {
   if (!req.file) return next();
   req.file.filename = `products-${req.user.id}-${Date.now()}.jpeg`;

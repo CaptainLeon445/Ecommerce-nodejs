@@ -7,8 +7,9 @@ const {
   updateReviews,
   deleteAReview,
 } = require("../Controllers/reviewsController");
+const { authProtect } = require("../Controllers/authConrollers");
 
 Router.route("/").get(getReviews)
-Router.route("/:prdId").post(createReviews);
-Router.route("/:id").get(getAReview).patch(updateReviews).delete(deleteAReview);
+Router.route("/:prdId").post(authProtect,createReviews);
+Router.route("/:id").get(getAReview).patch(authProtect,updateReviews).delete(authProtect,deleteAReview);
 module.exports = Router;

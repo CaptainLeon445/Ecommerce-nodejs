@@ -7,8 +7,10 @@ const {
   updateCategories,
   deleteAcategory,
 } = require("../Controllers/categoriesController");
+const { authProtect, restrictTo } = require("../Controllers/authConrollers");
 
-Router.route("/").get(getCategories).post(createCategories);
+Router.route("/").get(getCategories).post(authProtect,restrictTo("admin"),createCategories);
+Router.use(authProtect,restrictTo("admin"))
 Router.route("/:id")
   .get(getAcategory)
   .patch(updateCategories)

@@ -24,12 +24,6 @@ exports.createReviews=async(req, res)=>{
         const review=req.body;
         if(!review) throw new Error("Review is blank!")
         const data=await Reviews.create(review)
-        // const obj={reviews: new mongoose.Types.ObjectId(data._id)}
-        // const upadte_product =await Products.findByIdAndUpdate(prodId, obj, {
-        //     new: true, 
-        //     runValidators: true
-        // }).select("-name")
-        // upadte_product.save()
         res.status(201).json({
             message:"success",
             data
