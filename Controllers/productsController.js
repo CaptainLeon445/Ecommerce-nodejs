@@ -4,16 +4,6 @@ const Categories = require("../Model/categoriesModel");
 const multer = require("multer");
 const sharp = require("sharp");
 
-
-// const multerStorage = multer.diskStorage({
-//   destination: (req, file, cb)=>{
-//     cb(null, "public/img/products")
-//   },
-//   filename: (req, file, cb)=>{
-//     const ext = file.mimetype.split('/')[1]
-//     cb(null, `product-${req.user.id}-${Date.now()}.${ext}`)
-//   }
-// })
 const multerStorage = multer.memoryStorage();
 
 const multerFilter =(req, file, cb)=>{
@@ -35,7 +25,6 @@ exports.uploadProductPhotos = upload.fields([
 
 ])
 exports.ResizePhotoUpload = async(req, res, next) => {
-  console.log(!req.files.mainImage)
   if (!req.files.mainImage || !req.files.images) return next(new Error("Additional image not added!"));
 
   // mainImage
