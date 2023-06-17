@@ -4,7 +4,10 @@
   "description": "This project contains an ecommerce api endpoints",
   "main": "app.js",
   "scripts": {
-    "start": "npx nodemon server.js"
+    "start:dev": "npx nodemon server.js",
+    "start": "node app.js",
+    "build": "yarn build"
+
   },
   "author": "Dat Tech Guy",
   "license": "MIT",
@@ -22,5 +25,8 @@
     "sharp": "^0.32.1",
     "slugify": "^1.6.6",
     "validator": "^13.9.0"
+  },
+  "engines": {
+    "node": ">=14.20.1"
   }
 }
