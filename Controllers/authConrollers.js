@@ -11,6 +11,7 @@ exports.signUp=async (req, res)=>{
         const data={
             email: req.body.email,
             username: req.body.username,
+            roles: req.body.roles,
             password: req.body.password,
             passwordConfirm: req.body.passwordConfirm
         }

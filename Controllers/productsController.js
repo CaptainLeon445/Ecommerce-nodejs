@@ -29,15 +29,37 @@ const upload = multer({
   fileFilter: multerFilter
 });
 
-exports.uploadProductPhotos = upload.single('mainImage')
+exports.uploadProductPhotos = upload.fields([
+ { name: "mainImage", maxCount: 1},
+ { name: "images", maxCount: 10},
+
+])
 exports.ResizePhotoUpload = async(req, res, next) => {
-  if (!req.file) return next();
-  req.file.filename = `products-${req.user.id}-${Date.now()}.jpeg`;
-  await sharp(req.file.buffer)
+  console.log(!req.files.mainImage)
+  if (!req.files.mainImage || !req.files.images) return next(new Error("Additional image not added!"));
+
+  // mainImage
+  req.body.mainImage = `products-${req.user.id}-${Date.now()}.jpeg`;
+  await sharp(req.files.mainImage[0].buffer)
     .resize(500, 500)
     .toFormat('jpeg')
     .jpeg({ quality: 90 })
-    .toFile(`public/img/products/${req.file.filename}`);
+    .toFile(`public/img/products/${req.body.mainImage}`);
+
+  // images
+  req.body.images = []
+  await Promise.all(
+     req.files.images.map(async (file, index)=>{
+      const filename = `products-${req.user.id}-${Date.now()}-${index}.jpeg`;
+      await sharp(file.buffer)
+        .resize(500, 500)
+        .toFormat('jpeg')
+        .jpeg({ quality: 90 })
+        .toFile(`public/img/products/${filename}`);
+        req.body.images.push(filename)
+    })
+  )
+    
   next()
 };
 exports.getProducts = async (req, res) => {
@@ -88,7 +110,7 @@ exports.getProducts = async (req, res) => {
 exports.createProducts = async (req, res) => {
   try {
     const content = req.body;
-    if (req.file) content.mainImage=req.file.filename
+    if (req.file) content.mainImage=req.files.filename
     if (!content) throw new Error("Please enter the product details");
     // create products under a category
     const categoryId = req.params.ctgId;

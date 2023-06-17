@@ -41,7 +41,7 @@ const productSchema=mongoose.Schema({
         ref: "Categories"
     },
     mainImage: String,
-    imageURL:[{type:String}],
+    images:[{type:String}],
     size:[{type:String}],
     color:[{type:String}],
     ratingsAverage:{
