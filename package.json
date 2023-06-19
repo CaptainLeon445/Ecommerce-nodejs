@@ -4,10 +4,9 @@
   "description": "This project contains an ecommerce api endpoints",
   "main": "app.js",
   "scripts": {
-    "start:dev": "npx nodemon server.js",
+    "start:dev": "npx nodemon app.js",
     "start": "node app.js",
     "build": "yarn build"
-
   },
   "author": "Dat Tech Guy",
   "license": "MIT",
@@ -24,6 +23,8 @@
     "nodemailer": "^6.9.3",
     "sharp": "^0.32.1",
     "slugify": "^1.6.6",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^4.6.3",
     "validator": "^13.9.0"
   },
   "engines": {

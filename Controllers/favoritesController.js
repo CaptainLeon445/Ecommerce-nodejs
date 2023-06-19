@@ -1,26 +1,16 @@
-const Products = require("../Model/productsModel");
 const favorites = require("../Model/favoritesModel");
-const User = require("../Model/userModel");
+const catchAsyncError = require("../utils/catchAsyncError");
 
-
-exports.getfavorites = async (req, res) => {
-  try {
+exports.getfavorites = catchAsyncError(async (req, res, next) => {
     const data = await favorites.find();
     res.status(200).json({
       message: "success",
       results: data.length,
       data,
     });
-  } catch (err) {
-    res.status(400).json({
-      message: "success",
-      err: err.message,
-    });
-  }
-};
+});
 
-exports.createfavorites = async (req, res) => {
-  try {
+exports.createfavorites = catchAsyncError(async (req, res, next) => {
     req.body.product = req.params.prdId;
     req.body.user = req.user.id;
     let favorite = await favorites.findOne({user:req.body.user, product:req.body.product});
@@ -44,33 +34,23 @@ exports.createfavorites = async (req, res) => {
       message: "success",
       favorite,
     });
-  } catch (err) {
-    res.status(400).json({
-      message: "success",
-      err: err.message,
-    });
-  }
-};
+});
 
-exports.getUserfavorites = async (req, res) => {
-  try {
+exports.getUserfavorites = catchAsyncError(async (req, res, next) => {
     // req.body.product = req.params.prdId;
     req.body.user =  req.user.id;
     const data = await favorites.find({user: req.body.user});
+    if (!data){
+      return next(new AppError("No data", 400))
+    }
     res.status(200).json({
       message: "success",
       data,
     });
-  } catch (err) {
-    res.status(400).json({
-      message: "success",
-      err: err.message,
-    });
-  }
-};
+});
 
-exports.getUserfavoriteDetails = async (req, res) => {
-    try {
+exports.getUserfavoriteDetails = catchAsyncError(async (req, res, next) => {
+
       req.body.product = req.params.prdId;
       req.body.user =  req.user.id;
       const data = await favorites.find({user: req.body.user, product: req.body.product});
@@ -78,13 +58,7 @@ exports.getUserfavoriteDetails = async (req, res) => {
         message: "success",
         data,
       });
-    } catch (err) {
-      res.status(400).json({
-        message: "success",
-        err: err.message,
-      });
-    }
-  };
+  });
 
 
 

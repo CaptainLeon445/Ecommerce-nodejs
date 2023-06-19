@@ -1,10 +1,8 @@
-
 const Categories = require("../Model/categoriesModel")
 const Products= require("../Model/productsModel")
-const Reviews = require("../Model/reviewsModel")
+const catchAsyncError = require("../utils/catchAsyncError")
 
-exports.SimilarProducts =async (req, res)=>{
-    try{
+exports.SimilarProducts =catchAsyncError(async(req, res, next)=>{
      const similar = await Categories.findById(req.params.ctgId)
      const doc = await Products.aggregate([
         {
@@ -27,16 +25,12 @@ exports.SimilarProducts =async (req, res)=>{
             $sample: { size: 5}
         }
       ])
+      if (!doc){
+        return next(new AppError("No data with the specifed ID", 400))
+      }
       res.status(400).json({
         message: "success",
         results: doc.length,
         doc
     })
-        
-    }catch (err){
-        res.status(400).json({
-            message: "success",
-            err: err.message
-        })
-    }
-}
+})

@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 const Products = require("../Model/productsModel");
-const Categories = require("../Model/categoriesModel");
 const multer = require("multer");
 const sharp = require("sharp");
+const catchAsyncError = require("../utils/catchAsyncError");
 
 const multerStorage = multer.memoryStorage();
 
@@ -51,8 +51,8 @@ exports.ResizePhotoUpload = async(req, res, next) => {
     
   next()
 };
-exports.getProducts = async (req, res) => {
-  try {
+
+exports.getProducts = catchAsyncError(async (req, res, next) => {
     // 1 Filtering
     const queryObj = { ...req.query };
     const excludefields = ["sort"];
@@ -71,8 +71,6 @@ exports.getProducts = async (req, res) => {
     //   const ctgId = new mongoose.Types.ObjectId(category[0]._id);
     //   query = Products.find({ category: ctgId });
     // }
-  
-    
 
     // sort
     if (req.query.sort) {
@@ -88,19 +86,14 @@ exports.getProducts = async (req, res) => {
       results: data.length,
       data,
     });
-  } catch (err) {
-    res.status(400).json({
-      message: "success",
-      err: err.message,
-    });
-  }
-};
+});
 
-exports.createProducts = async (req, res) => {
-  try {
+exports.createProducts = catchAsyncError(async (req, res, next) => {
     const content = req.body;
     if (req.file) content.mainImage=req.files.filename
-    if (!content) throw new Error("Please enter the product details");
+    if (!content){
+        return next(new AppError("Kindly enter the product details", 400))
+    };
     // create products under a category
     const categoryId = req.params.ctgId;
     // convert the category id to mongoose id type and parse into the request body
@@ -111,63 +104,45 @@ exports.createProducts = async (req, res) => {
       results: data.length,
       data,
     });
-  } catch (err) {
-    res.status(400).json({
-      message: "success",
-      err: err.message,
-    });
-  }
-};
+});
 
-exports.getAProduct = async (req, res) => {
-  try {
+exports.getAProduct = catchAsyncError(async (req, res, next) => {
     const id = req.params.id;
     const data = await Products.findById(id);
+    if (!data){
+      return next(new AppError("No data with the specifed ID", 400))
+    }
     res.status(200).json({
       message: "success",
       data,
     });
-  } catch (err) {
-    res.status(400).json({
-      message: "success",
-      err: err.message,
-    });
-  }
-};
+});
 
-exports.deleteAProduct = async (req, res) => {
-  try {
+exports.deleteAProduct = catchAsyncError(async (req, res, next) => {
     const id = req.params.id;
-    await Products.findById(id);
+    const data =await Products.findById(id);
+    if (!data){
+      return next(new AppError("No data with the specifed ID", 400))
+    }
     res.status(204).json({
       message: "success",
       data: null,
     });
-  } catch (err) {
-    res.status(400).json({
-      message: "success",
-      err: err.message,
-    });
-  }
-};
+});
 
-exports.updateProducts = async (req, res) => {
-  try {
+exports.updateProducts = catchAsyncError(async (req, res, next) => {
     const id = req.params.id;
     const content = req.body;
     const data = await Products.findByIdAndUpdate(id, content, {
       new: true,
       runValidators: true,
     }).select("-password");
+    if (!data){
+      return next(new AppError("No data with the specifed ID", 400))
+    }
     await data.save();
     res.status(200).json({
       message: "success",
       data,
     });
-  } catch (err) {
-    res.status(400).json({
-      message: "success",
-      err: err.message,
-    });
-  }
-};
+});
