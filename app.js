@@ -30,12 +30,11 @@ app.use(globalErrorHandler)
 let DB = process.env.DATABASE_DEV;
 let port = 8000;
 if (process.env.NODE_ENV === "production") {
-  DB = process.env.DATABASE_DEV
-  // DB = process.env.DATABASE_PROD.replace(
-  //   "<PASSWORD>",
-  //   process.env.DATABASE_PASSWORD
-  // );
-  // port = process.env.PORT;
+  DB = process.env.DATABASE_PROD.replace(
+    "<PASSWORD>",
+    process.env.DATABASE_PASSWORD
+  );
+  port = process.env.PORT;
 }
 mongoose
   .connect(DB, {
