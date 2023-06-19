@@ -1,4 +1,5 @@
 const Categories = require("../Model/categoriesModel");
+const AppError = require("../utils/appError");
 const catchAsyncError = require("../utils/catchAsyncError");
 
 exports.getCategories = catchAsyncError(async (req, res, next) => {

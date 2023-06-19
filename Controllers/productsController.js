@@ -3,6 +3,7 @@ const Products = require("../Model/productsModel");
 const multer = require("multer");
 const sharp = require("sharp");
 const catchAsyncError = require("../utils/catchAsyncError");
+const AppError = require("../utils/appError");
 
 const multerStorage = multer.memoryStorage();
 

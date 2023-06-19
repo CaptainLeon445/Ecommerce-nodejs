@@ -8,7 +8,6 @@ const mongoose = require("mongoose");
 const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsyncError");
 
-
 exports.signUp = catchAsync(async (req, res, next) => {
   const data = {
     email: req.body.email,
@@ -29,17 +28,11 @@ exports.signUp = catchAsync(async (req, res, next) => {
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    return res.status(400).json({
-      message: "fail",
-      err: "Fields cannot be blank",
-    });
+    return next(new AppError("Email or Password incorrect.", 400));
   }
   const user = await User.findOne({ email }).select("+password");
   if (!user || !(await user.comparePassword(password, user.password))) {
-    return res.status(400).json({
-      message: "fail",
-      err: "Email or Password incorrect.",
-    });
+    return next(new AppError("Email or Password incorrect.", 400));
   }
   const token = jwtToken(user._id);
   res.status(200).json({
@@ -60,7 +53,7 @@ exports.authProtect = async (req, res, next) => {
   }
 
   if (!token) {
-    return next(new AppError("No Token", 400));
+    return next(new AppError("You are not authorized.", 400));
   }
   // decode the token
   const decoded = await promisify(jwt.verify)(

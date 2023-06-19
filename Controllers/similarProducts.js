@@ -1,5 +1,6 @@
 const Categories = require("../Model/categoriesModel")
 const Products= require("../Model/productsModel")
+const AppError = require("../utils/appError")
 const catchAsyncError = require("../utils/catchAsyncError")
 
 exports.SimilarProducts =catchAsyncError(async(req, res, next)=>{

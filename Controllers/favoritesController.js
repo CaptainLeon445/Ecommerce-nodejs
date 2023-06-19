@@ -1,4 +1,5 @@
 const favorites = require("../Model/favoritesModel");
+const AppError = require("../utils/appError");
 const catchAsyncError = require("../utils/catchAsyncError");
 
 exports.getfavorites = catchAsyncError(async (req, res, next) => {

@@ -2,6 +2,7 @@ const session = require("express-session");
 const Products = require("../Model/productsModel");
 const Cart = require("../Model/cartModel");
 const catchAsyncError = require("../utils/catchAsyncError");
+const AppError = require("../utils/appError");
 
 exports.getCart = catchAsyncError(async (req, res) => {
   const cart = req.session.cart || [];
